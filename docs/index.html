@@ -8,23 +8,262 @@
     <style>
         /* Add your desired styles here */
     </style>
+    <script>
+        function showCalculator(calculatorId) {
+            // Hide all calculators
+            var calculators = document.getElementsByClassName('calculator');
+            for (var i = 0; i < calculators.length; i++) {
+                calculators[i].style.display = 'none';
+            }
+
+            // Show the selected calculator
+            var selectedCalculator = document.getElementById(calculatorId);
+            selectedCalculator.style.display = 'block';
+        }
+    </script>
 </head>
 
 <body>
+    <h1>Attendance Calculator</h1>
+
     <div>
-        <input type="radio" name="tab" id="tab1" checked>
+        <input type="radio" name="tab" id="tab1" onclick="showCalculator('calculator1')" checked>
         <label for="tab1">Calculator 1</label>
 
-        <input type="radio" name="tab" id="tab2">
+        <input type="radio" name="tab" id="tab2" onclick="showCalculator('calculator2')">
         <label for="tab2">Calculator 2</label>
+    </div>
 
-        <div class="calculator-container">
-            <iframe src="calculator1.html" frameborder="0"></iframe>
-        </div>
+    <div id="calculator1" class="calculator" style="display: block;">
+        <!-- Calculator 1 HTML content -->
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Attendance Calculator</title>
+            <style>
+                body {
+                    background-color: #0f0f0f;
+                    color: #ffffff;
+                }
+        
+                .container {
+                    max-width: 400px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+        
+                .form-group label {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+        
+                .form-control {
+                    background-color: #2d2d2d;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 8px;
+                    margin-bottom: 10px;
+                    width: 100%;
+                }
+        
+                .btn {
+                    background-color: #2196F3;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                }
+        
+                .result-container {
+                    margin-top: 20px;
+                    padding: 10px;
+                    border-radius: 5px;
+                    background-color: #333333;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <div class="container">
+                <h1>Attendance Calculator</h1>
+                <form onsubmit="event.preventDefault(); calculateHoursToMakeup();">
+                    <div class="form-group">
+                        <label for="total_hours_possible">How many hours are possible in the course?</label>
+                        <input type="text" class="form-control" id="total_hours_possible" name="total_hours_possible" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="percent_goal">What is your goal percentage for attendance?</label>
+                        <input type="text" class="form-control" id="percent_goal" name="percent_goal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hours_absent">How many hours were you absent?</label>
+                        <input type="text" class="form-control" id="hours_absent" name="hours_absent" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hours_makeup">How many hours have you officially made up?</label>
+                        <input type="text" class="form-control" id="hours_makeup" name="hours_makeup" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="uo_minutes">Have you made up any hours unofficially? (in minutes)</label>
+                        <input type="text" class="form-control" id="uo_minutes" name="uo_minutes" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </form>
+                <div id="result" class="result-container"></div>
+        
+                <script>
+                    function calculateHoursToMakeup() {
+                        const totalHoursPossibleInput = document.getElementById('total_hours_possible');
+                        const percentGoalInput = document.getElementById('percent_goal');
+                        const hoursAbsentInput = document.getElementById('hours_absent');
+                        const hoursMakeupInput = document.getElementById('hours_makeup');
+                        const uoMinutesInput = document.getElementById('uo_minutes');
 
-        <div class="calculator-container">
-            <iframe src="calculator2.html" frameborder="0"></iframe>
-        </div>
+                        const totalHoursPossible = parseFloat(totalHoursPossibleInput.value);
+                        const percentGoal = parseFloat(percentGoalInput.value);
+                        const hoursAbsent = parseFloat(hoursAbsentInput.value);
+                        const hoursMakeup = parseFloat(hoursMakeupInput.value);
+                        const uoMinutes = parseFloat(uoMinutesInput.value);
+
+                        const uoHours = uoMinutes / 60;
+                        const totalHoursMissed = hoursAbsent - hoursMakeup - uoHours;
+                        const percentDecimal = percentGoal / 100;
+                        const uoTotal = totalHoursMissed - uoHours;
+                        const currentHours = totalHoursPossible - totalHoursMissed;
+                        const currentDecimal = currentHours / totalHoursPossible;
+                        const currentPercent = currentDecimal * 100;
+                        const possibleAbsentHours = totalHoursPossible * percentDecimal;
+                        const maxAbsentHours = totalHoursPossible - possibleAbsentHours;
+                        const hoursNeeded = totalHoursMissed - maxAbsentHours - uoHours;
+                        const time = hoursNeeded;
+                        const hours = Math.floor(time);
+                        const minutes = Math.floor((time * 60) % 60);
+                        const rounded = hoursNeeded.toFixed(2);
+                        const percentRounded = currentPercent.toFixed(2);
+                        let resultText = '';
+                        if (currentPercent < percentGoal) {
+                            if (hoursNeeded >= 0 || minutes >= 0) {
+                                resultText = `You need to make up ${hours} hours ${minutes} minutes to reach your goal.`;
+                            } else {
+                                resultText = `Congratulations! You have exceeded your goal with a current percentage of ${percentRounded}%.`;
+                            }
+                        } else {
+                            resultText = `Congratulations! You have exceeded your goal with a current percentage of ${percentRounded}%.`;
+                        }
+
+                        const resultContainer = document.getElementById('result');
+                        resultContainer.textContent = resultText;
+                    }
+                </script>
+            </div>
+        </body>
+        
+        </html>
+    </div>
+
+    <div id="calculator2" class="calculator" style="display: none;">
+        <!-- Calculator 2 HTML content -->
+        <!DOCTYPE html>
+        <html>
+        
+        <head>
+            <title>Attendance Calculator</title>
+            <style>
+                /* Set the color scheme */
+                body {
+                    background-color: #F0F0F0;
+                    font-family: Arial, sans-serif;
+                }
+        
+                h1 {
+                    color: #1E90FF;
+                }
+        
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    color: #333333;
+                }
+        
+                input[type="text"] {
+                    padding: 5px;
+                    border: 1px solid #CCCCCC;
+                    border-radius: 3px;
+                }
+        
+                button {
+                    padding: 8px 15px;
+                    background-color: #1E90FF;
+                    color: #FFFFFF;
+                    border: none;
+                    border-radius: 3px;
+                    cursor: pointer;
+                }
+        
+                button:hover {
+                    background-color: #0077FF;
+                }
+        
+                #result {
+                    margin-top: 10px;
+                    padding: 10px;
+                    background-color: #FFFFFF;
+                    border: 1px solid #CCCCCC;
+                    border-radius: 3px;
+                    color: #333333;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <h1>Attendance Calculator</h1>
+        
+            <label for="total_hours">Total Possible Hours:</label>
+            <input type="text" id="total_hours">
+        
+            <label for="current_percent">Current Attendance Percentage:</label>
+            <input type="text" id="current_percent">
+        
+            <label for="goal_percent">Goal Attendance Percentage:</label>
+            <input type="text" id="goal_percent">
+        
+            <button onclick="calculateHoursNeeded()">Calculate</button>
+        
+            <div id="result"></div>
+        
+            <script>
+                function calculateHoursNeeded() {
+                    var totalPossibleHours = parseFloat(document.getElementById("total_hours").value);
+                    var currentPercent = parseFloat(document.getElementById("current_percent").value);
+                    var goalPercent = parseFloat(document.getElementById("goal_percent").value);
+
+                    // Calculations
+                    var currentDecimal = currentPercent / 100;
+                    var goalDecimal = goalPercent / 100;
+                    var decimalDiff = goalDecimal - currentDecimal;
+                    var hoursNeeded = decimalDiff * totalPossibleHours;
+
+                    // Calculate hours and minutes
+                    var hours = Math.floor(hoursNeeded);
+                    var minutes = Math.floor((hoursNeeded * 60) % 60);
+
+                    // Format the result string
+                    var resultText = "With your current attendance percentage of " + currentPercent + "%, you need to make up " + hours + " hours and " + minutes + " minutes.";
+
+                    // Display the result
+                    var resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = '<p>' + resultText + '</p>';
+                    resultDiv.style.display = 'block';
+                }
+            </script>
+        </body>
+        
+        </html>
     </div>
 </body>
 
