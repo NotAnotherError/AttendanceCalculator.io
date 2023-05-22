@@ -193,6 +193,10 @@
                 const currentHours = totalHours * currentDecimal;
                 const goalHours = totalHours * goalDecimal;
                 const hoursNeeded = goalHours - currentHours;
+                const time = hoursNeeded * 60;
+                const timeMinutes = time % 60;
+                const timeHours = (time - timeMinutes) / 60;
+
 
                 const resultContainer = document.getElementById(`result${calculatorId}`);
                 resultContainer.innerHTML = `
