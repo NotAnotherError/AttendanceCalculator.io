@@ -3,6 +3,7 @@
 
 <head>
     <title>Attendance Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         /* Set the color scheme */
         body {
@@ -62,45 +63,72 @@
     <h1>Attendance Calculator</h1>
 
     <!-- First Calculator: Hours to Make Up -->
-    <div id="calculator1">
-        <h2>Hours to Make Up</h2>
+    <div id="calculator1" class="container">
+        <h2 class="text-center">Hours to Make Up</h2>
 
-        <label for="total_hours_possible1">Total Possible Hours:</label>
-        <input type="number" id="total_hours_possible1">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="total_hours_possible1" class="form-label">Total Possible Hours:</label>
+                <input type="number" id="total_hours_possible1" class="form-control">
+            </div>
+            <div class="col">
+                <label for="percent_goal1" class="form-label">Goal Percentage for Attendance:</label>
+                <input type="number" id="percent_goal1" class="form-control">
+            </div>
+        </div>
 
-        <label for="percent_goal1">Goal Percentage for Attendance:</label>
-        <input type="number" id="percent_goal1">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="hours_absent1" class="form-label">Hours Absent:</label>
+                <input type="number" id="hours_absent1" class="form-control">
+            </div>
+            <div class="col">
+                <label for="hours_makeup1" class="form-label">Hours Made Up:</label>
+                <input type="number" id="hours_makeup1" class="form-control">
+            </div>
+        </div>
 
-        <label for="hours_absent1">Hours Absent:</label>
-        <input type="number" id="hours_absent1">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="uo_minutes1" class="form-label">Unofficially Made Up Hours (in minutes):</label>
+                <input type="number" id="uo_minutes1" class="form-control">
+            </div>
+        </div>
 
-        <label for="hours_makeup1">Hours Made Up:</label>
-        <input type="number" id="hours_makeup1">
+        <div class="text-center">
+            <button class="btn btn-primary" onclick="calculateHoursToMakeup()">Calculate</button>
+        </div>
 
-        <label for="uo_minutes1">Unofficially Made Up Hours (in minutes):</label>
-        <input type="number" id="uo_minutes1">
-
-        <button class="btn" onclick="calculateHoursToMakeup()">Calculate</button>
-
-        <div id="result1" class="result-container"></div>
+        <div id="result1" class="result-container mt-3"></div>
     </div>
 
     <!-- Second Calculator: Hours Needed -->
-    <div id="calculator2">
-        <h2>Hours Needed</h2>
+    <div id="calculator2" class="container">
+        <h2 class="text-center">Hours Needed</h2>
 
-        <label for="total_hours_possible2">Total Possible Hours:</label>
-        <input type="number" id="total_hours_possible2">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="total_hours_possible2" class="form-label">Total Possible Hours:</label>
+                <input type="number" id="total_hours_possible2" class="form-control">
+            </div>
+            <div class="col">
+                <label for="current_percent2" class="form-label">Current Attendance Percentage:</label>
+                <input type="number" id="current_percent2" class="form-control">
+            </div>
+        </div>
 
-        <label for="current_percent2">Current Attendance Percentage:</label>
-        <input type="number" id="current_percent2">
+        <div class="row mb-3">
+            <div class="col">
+                <label for="goal_percent2" class="form-label">Goal Attendance Percentage:</label>
+                <input type="number" id="goal_percent2" class="form-control">
+            </div>
+        </div>
 
-        <label for="goal_percent2">Goal Attendance Percentage:</label>
-        <input type="number" id="goal_percent2">
+        <div class="text-center">
+            <button class="btn btn-primary" onclick="calculateHoursNeeded()">Calculate</button>
+        </div>
 
-        <button class="btn" onclick="calculateHoursNeeded()">Calculate</button>
-
-        <div id="result2" class="result-container"></div>
+        <div id="result2" class="result-container mt-3"></div>
     </div>
 
     <script>
@@ -152,10 +180,12 @@
             var goalDecimal = goalPercent / 100;
             var decimalDiff = goalDecimal - currentDecimal;
             var hoursNeeded = decimalDiff * totalPossibleHours;
-            var hours = Math.floor(hoursNeeded);
-            var minutes = Math.floor((hoursNeeded * 60) % 60);
+            var time = hoursNeeded;
+            var hours = Math.floor(time);
+            var minutes = Math.floor((time * 60) % 60);
+            var rounded = hoursNeeded.toFixed(2);
 
-            var resultText = "With your current attendance percentage of " + currentPercent + "%, you need to make up " + hours + " hours and " + minutes + " minutes.";
+            var resultText = "You need to accumulate " + hours + " hours " + minutes + " minutes to reach your goal.";
 
             var resultContainer = document.getElementById("result2");
             resultContainer.innerHTML = "<p>" + resultText + "</p>";
