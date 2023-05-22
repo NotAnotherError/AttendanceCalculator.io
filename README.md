@@ -1,6 +1,6 @@
 # AttendanceCalculator
 
-Webpage:notanothererror.github.io/AttendanceCalculator.io/
+Webpage: notanothererror.github.io/AttendanceCalculator.io/
 
 
  Calculate your attendance percentages on the fly.
