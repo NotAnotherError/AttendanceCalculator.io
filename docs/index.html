@@ -173,23 +173,9 @@
                 const resultContainer = document.getElementById(`result${calculatorId}`);
                 resultContainer.innerHTML = `
           <h3>Result:</h3>
-          <p>Total Hours Possible: ${totalHoursPossible}</p>
-          <p>Percent Goal for Attendance: ${percentGoal}%</p>
-          <p>Hours Absent: ${hoursAbsent}</p>
-          <p>Official Hours Made Up: ${hoursMakeup}</p>
-          <p>Unofficial Hours Made Up (in minutes): ${uoMinutes}</p>
           <hr>
-          <p>Total Hours Missed: ${totalHoursMissed}</p>
-          <p>Unofficial Hours (converted to hours): ${uoHours.toFixed(2)}</p>
-          <p>Current Total Missed Hours (minus unofficial hours): ${uoTotal.toFixed(2)}</p>
-          <p>Current Total Hours Possible: ${currentHours}</p>
           <p>Current Attendance Percentage: ${currentPercent.toFixed(2)}%</p>
-          <hr>
-          <p>Possible Absent Hours Based on Goal: ${possibleAbsentHours.toFixed(2)}</p>
-          <p>Maximum Absent Hours Allowed: ${maxAbsentHours.toFixed(2)}</p>
-          <hr>
-          <p>Hours Needed to Reach Goal: ${hoursNeeded.toFixed(2)}</p>
-          <p>Time Needed to Reach Goal: ${timeHours} hours and ${timeMinutes} minutes</p>
+          <p>Time Needed to Reach Goal: ${timeHours} hours and ${timeMinutes.toFixed(2)} minutes</p>
         `;
             }
 
@@ -214,11 +200,9 @@
           <h3>Result:</h3>
           <p>Total Hours Possible: ${totalHours}</p>
           <p>Current Attendance Percentage: ${currentPercent}%</p>
-          <p>Goal Attendance Percentage: ${goalPercent}%</p>
-          <hr>
-          <p>Current Hours Attended: ${currentHours.toFixed(2)}</p>
+            <hr>
           <p>Goal Hours Required: ${goalHours.toFixed(2)}</p>
-          <p>Hours Needed to Reach Goal: ${hoursNeeded.toFixed(2)}</p>
+          <p>Time Needed to Reach Goal: ${timeHours} hours and ${timeMinutes.toFixed(2)} minutes</p>
         `;
             }
         </script>
