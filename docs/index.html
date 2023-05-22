@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Calculator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css">
     <style>
+        /* Set the color scheme */
         body {
             background-color: #0f0f0f;
             color: #ffffff;
         }
 
         .container {
-            max-width: 400px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -48,21 +48,14 @@
             border-radius: 5px;
             background-color: #333333;
         }
-
-        .result-container input {
-            background-color: transparent;
-            color: #ffffff;
-            border: none;
-            width: 100%;
-            margin-top: 5px;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1 class="text-center">Attendance Calculator</h1>
-        <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+        <h1>Attendance Calculator</h1>
+
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="pills-calculator1-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-calculator1" type="button" role="tab" aria-controls="pills-calculator1"
@@ -74,6 +67,7 @@
                     aria-selected="false">Calculator 2</button>
             </li>
         </ul>
+
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-calculator1" role="tabpanel"
                 aria-labelledby="pills-calculator1-tab">
@@ -103,19 +97,20 @@
                 </form>
                 <div id="result1" class="result-container"></div>
             </div>
+
             <div class="tab-pane fade" id="pills-calculator2" role="tabpanel" aria-labelledby="pills-calculator2-tab">
                 <form onsubmit="event.preventDefault(); calculateHoursNeeded();">
                     <div class="form-group">
                         <label for="total_hours2">Total Possible Hours:</label>
-                        <input type="text" class="form-control" id="total_hours2" required>
+                        <input type="text" class="form-control" id="total_hours2" name="total_hours2" required>
                     </div>
                     <div class="form-group">
                         <label for="current_percent2">Current Attendance Percentage:</label>
-                        <input type="text" class="form-control" id="current_percent2" required>
+                        <input type="text" class="form-control" id="current_percent2" name="current_percent2" required>
                     </div>
                     <div class="form-group">
                         <label for="goal_percent2">Goal Attendance Percentage:</label>
-                        <input type="text" class="form-control" id="goal_percent2" required>
+                        <input type="text" class="form-control" id="goal_percent2" name="goal_percent2" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Calculate</button>
                 </form>
@@ -125,11 +120,11 @@
 
         <script>
             function calculateHoursToMakeup() {
-                var totalHoursPossibleInput = document.getElementById("total_hours_possible1");
-                var percentGoalInput = document.getElementById("percent_goal1");
-                var hoursAbsentInput = document.getElementById("hours_absent1");
-                var hoursMakeupInput = document.getElementById("hours_makeup1");
-                var uoMinutesInput = document.getElementById("uo_minutes1");
+                var totalHoursPossibleInput = document.getElementById('total_hours_possible1');
+                var percentGoalInput = document.getElementById('percent_goal1');
+                var hoursAbsentInput = document.getElementById('hours_absent1');
+                var hoursMakeupInput = document.getElementById('hours_makeup1');
+                var uoMinutesInput = document.getElementById('uo_minutes1');
 
                 var totalHoursPossible = parseFloat(totalHoursPossibleInput.value);
                 var percentGoal = parseFloat(percentGoalInput.value);
@@ -147,19 +142,42 @@
                 var possibleAbsentHours = totalHoursPossible * percentDecimal;
                 var maxAbsentHours = totalHoursPossible - possibleAbsentHours;
                 var hoursNeeded = totalHoursMissed - maxAbsentHours - uoHours;
-
                 var time = hoursNeeded;
                 var hours = Math.floor(time);
-                var minutes = Math.floor((time - hours) * 60);
+                var minutes = Math.floor((time * 60) % 60);
+                var rounded = hoursNeeded.toFixed(2);
+                var percentRounded = currentPercent.toFixed(2);
 
-                var resultContainer = document.getElementById("result1");
-                resultContainer.innerHTML = "<strong>Hours to Make Up: </strong>" + hours + " hours and " + minutes + " minutes";
+                var resultText = '';
+                if (currentPercent < percentGoal) {
+                    if (hoursNeeded <= 0) {
+                        resultText = 'You have already reached your attendance goal.';
+                    } else {
+                        resultText =
+                            'To reach your attendance goal of ' +
+                            percentGoal +
+                            '%, you need to make up ' +
+                            hours +
+                            ' hour(s) and ' +
+                            minutes +
+                            ' minute(s) of missed time.';
+                    }
+                } else {
+                    resultText =
+                        'Your current attendance percentage is ' +
+                        percentRounded +
+                        '%, which meets or exceeds your goal of ' +
+                        percentGoal +
+                        '%.';
+                }
+
+                document.getElementById('result1').textContent = resultText;
             }
 
             function calculateHoursNeeded() {
-                var totalHoursInput = document.getElementById("total_hours2");
-                var currentPercentInput = document.getElementById("current_percent2");
-                var goalPercentInput = document.getElementById("goal_percent2");
+                var totalHoursInput = document.getElementById('total_hours2');
+                var currentPercentInput = document.getElementById('current_percent2');
+                var goalPercentInput = document.getElementById('goal_percent2');
 
                 var totalHours = parseFloat(totalHoursInput.value);
                 var currentPercent = parseFloat(currentPercentInput.value);
@@ -167,12 +185,25 @@
 
                 var currentDecimal = currentPercent / 100;
                 var goalDecimal = goalPercent / 100;
+
                 var currentHours = totalHours * currentDecimal;
                 var goalHours = totalHours * goalDecimal;
                 var hoursNeeded = goalHours - currentHours;
+                var time = hoursNeeded;
+                var hours = Math.floor(time);
+                var minutes = Math.floor((time * 60) % 60);
+                var rounded = hoursNeeded.toFixed(2);
 
-                var resultContainer = document.getElementById("result2");
-                resultContainer.innerHTML = "<strong>Hours Needed: </strong>" + hoursNeeded;
+                var resultText =
+                    'To reach your goal of ' +
+                    goalPercent +
+                    '%, you need to attend ' +
+                    hours +
+                    ' hour(s) and ' +
+                    minutes +
+                    ' minute(s) of class time.';
+
+                document.getElementById('result2').textContent = resultText;
             }
         </script>
     </div>
