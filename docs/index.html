@@ -1,147 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Calculator</title>
     <style>
-        /* ChatGPT Theme */
+        /* Set the color scheme */
         body {
-            background-color: #222222;
+            background-color: #0f0f0f;
             color: #ffffff;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
         }
 
         h1 {
-            text-align: center;
             color: #1E90FF;
+            text-align: center;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        label {
+            display: block;
+            margin-bottom: 5px;
         }
 
-        .btn-group {
-            display: flex;
-            justify-content: center;
+        input[type="text"],
+        input[type="number"] {
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+            background-color: #2d2d2d;
+            color: #ffffff;
+            width: 100%;
         }
 
-        .btn-group button {
+        .btn {
+            padding: 8px 15px;
             background-color: #1E90FF;
             color: #ffffff;
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 0 5px;
+            border-radius: 3px;
             cursor: pointer;
         }
 
-        .btn-group button:hover {
+        .btn:hover {
             background-color: #0077FF;
         }
 
         .result-container {
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 10px;
-            border-radius: 5px;
             background-color: #333333;
+            border-radius: 3px;
+        }
+
+        .result-container p {
+            margin: 0;
+            color: #ffffff;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Attendance Calculator</h1>
-        <div class="form-group">
-            <label for="total_hours_possible">How many hours are possible in the course?</label>
-            <input type="text" class="form-control" id="total_hours_possible" required>
-        </div>
-        <div class="form-group">
-            <label for="percent_goal">What is your goal percentage for attendance?</label>
-            <input type="text" class="form-control" id="percent_goal" required>
-        </div>
-        <div class="form-group">
-            <label for="hours_absent">How many hours were you absent?</label>
-            <input type="text" class="form-control" id="hours_absent" required>
-        </div>
-        <div class="form-group">
-            <label for="hours_makeup">How many hours have you officially made up?</label>
-            <input type="text" class="form-control" id="hours_makeup" required>
-        </div>
-        <div class="form-group">
-            <label for="uo_minutes">Have you made up any hours unofficially? (in minutes)</label>
-            <input type="text" class="form-control" id="uo_minutes" required>
-        </div>
-        <div class="btn-group">
-            <button onclick="calculateHoursToMakeup()">Calculate</button>
-            <button onclick="clearForm()">Clear</button>
-        </div>
-        <div id="result" class="result-container"></div>
+    <h1>Attendance Calculator</h1>
 
-        <script>
-            function calculateHoursToMakeup() {
-                const totalHoursPossibleInput = document.getElementById('total_hours_possible');
-                const percentGoalInput = document.getElementById('percent_goal');
-                const hoursAbsentInput = document.getElementById('hours_absent');
-                const hoursMakeupInput = document.getElementById('hours_makeup');
-                const uoMinutesInput = document.getElementById('uo_minutes');
+    <!-- First Calculator: Hours to Make Up -->
+    <div id="calculator1">
+        <h2>Hours to Make Up</h2>
 
-                const totalHoursPossible = parseFloat(totalHoursPossibleInput.value);
-                const percentGoal = parseFloat(percentGoalInput.value);
-                const hoursAbsent = parseFloat(hoursAbsentInput.value);
-                const hoursMakeup = parseFloat(hoursMakeupInput.value);
-                const uoMinutes = parseFloat(uoMinutesInput.value);
+        <label for="total_hours_possible1">Total Possible Hours:</label>
+        <input type="number" id="total_hours_possible1">
 
-                const uoHours = uoMinutes / 60;
-                const totalHoursMissed = hoursAbsent - hoursMakeup;
-                const percentDecimal = percentGoal / 100;
-                const uoTotal = totalHoursMissed - uoHours;
-                const currentHours = totalHoursPossible - totalHoursMissed;
-                const currentDecimal = currentHours / totalHoursPossible;
-                const currentPercent = currentDecimal * 100;
-                const possibleAbsentHours = totalHoursPossible * percentDecimal;
-                const maxAbsentHours = totalHoursPossible - possibleAbsentHours;
-                const hoursNeeded = totalHoursMissed - maxAbsentHours - uoHours;
-                const time = hoursNeeded;
-                const hours = Math.floor(time);
-                const minutes = Math.floor((time * 60) % 60);
-                const rounded = hoursNeeded.toFixed(2);
-                const percentRounded = currentPercent.toFixed(2);
+        <label for="percent_goal1">Goal Percentage for Attendance:</label>
+        <input type="number" id="percent_goal1">
 
-                let resultText = '';
-                if (currentPercent < percentGoal) {
-                    if (hoursNeeded >= 0 || minutes >= 0) {
-                        resultText = `You need to make up ${hours} hours ${minutes} minutes to reach your goal.`;
-                    } else {
-                        resultText = `Congratulations! You have exceeded your goal with a current percentage of ${percentRounded}%.`;
-                    }
-                } else {
-                    resultText = `Congratulations! You have exceeded your goal with a current percentage of ${percentRounded}%.`;
-                }
+        <label for="hours_absent1">Hours Absent:</label>
+        <input type="number" id="hours_absent1">
 
-                const resultContainer = document.getElementById('result');
-                resultContainer.textContent = resultText;
-            }
+        <label for="hours_makeup1">Hours Made Up:</label>
+        <input type="number" id="hours_makeup1">
 
-            function clearForm() {
-                document.getElementById('total_hours_possible').value = '';
-                document.getElementById('percent_goal').value = '';
-                document.getElementById('hours_absent').value = '';
-                document.getElementById('hours_makeup').value = '';
-                document.getElementById('uo_minutes').value = '';
-                document.getElementById('result').textContent = '';
-            }
-        </script>
+        <label for="uo_minutes1">Unofficially Made Up Hours (in minutes):</label>
+        <input type="number" id="uo_minutes1">
+
+        <button class="btn" onclick="calculateHoursToMakeup()">Calculate</button>
+
+        <div id="result1" class="result-container"></div>
     </div>
+
+    <!-- Second Calculator: Hours Needed -->
+    <div id="calculator2">
+        <h2>Hours Needed</h2>
+
+        <label for="total_hours_possible2">Total Possible Hours:</label>
+        <input type="number" id="total_hours_possible2">
+
+        <label for="current_percent2">Current Attendance Percentage:</label>
+        <input type="number" id="current_percent2">
+
+        <label for="goal_percent2">Goal Attendance Percentage:</label>
+        <input type="number" id="goal_percent2">
+
+        <button class="btn" onclick="calculateHoursNeeded()">Calculate</button>
+
+        <div id="result2" class="result-container"></div>
+    </div>
+
+    <script>
+        function calculateHoursToMakeup() {
+            var totalHoursPossible = parseFloat(document.getElementById("total_hours_possible1").value);
+            var percentGoal = parseFloat(document.getElementById("percent_goal1").value);
+            var hoursAbsent = parseFloat(document.getElementById("hours_absent1").value);
+            var hoursMakeup = parseFloat(document.getElementById("hours_makeup1").value);
+            var uoMinutes = parseFloat(document.getElementById("uo_minutes1").value);
+
+            var uoHours = uoMinutes / 60;
+            var totalHoursMissed = hoursAbsent - hoursMakeup;
+            var percentDecimal = percentGoal / 100;
+            var uoTotal = totalHoursMissed - uoHours;
+            var currentHours = totalHoursPossible - totalHoursMissed;
+            var currentDecimal = currentHours / totalHoursPossible;
+            var currentPercent = currentDecimal * 100;
+            var possibleAbsentHours = totalHoursPossible * percentDecimal;
+            var maxAbsentHours = totalHoursPossible - possibleAbsentHours;
+            var hoursNeeded = totalHoursMissed - maxAbsentHours - uoHours;
+            var time = hoursNeeded;
+            var hours = Math.floor(time);
+            var minutes = Math.floor((time * 60) % 60);
+            var rounded = hoursNeeded.toFixed(2);
+            var percentRounded = currentPercent.toFixed(2);
+
+            var resultText = '';
+
+            if (currentPercent < percentGoal) {
+                if (hoursNeeded >= 0 || minutes >= 0) {
+                    resultText = "You need to make up " + hours + " hours " + minutes + " minutes to reach your goal.";
+                } else {
+                    resultText = "Congratulations! You have exceeded your goal with a current percentage of " + percentRounded + "%.";
+                }
+            } else {
+                resultText = "Congratulations! You have exceeded your goal with a current percentage of " + percentRounded + "%.";
+            }
+
+            var resultContainer = document.getElementById("result1");
+            resultContainer.innerHTML = "<p>" + resultText + "</p>";
+        }
+
+        function calculateHoursNeeded() {
+            var totalPossibleHours = parseFloat(document.getElementById("total_hours_possible2").value);
+            var currentPercent = parseFloat(document.getElementById("current_percent2").value);
+            var goalPercent = parseFloat(document.getElementById("goal_percent2").value);
+
+            var currentDecimal = currentPercent / 100;
+            var goalDecimal = goalPercent / 100;
+            var decimalDiff = goalDecimal - currentDecimal;
+            var hoursNeeded = decimalDiff * totalPossibleHours;
+            var hours = Math.floor(hoursNeeded);
+            var minutes = Math.floor((hoursNeeded * 60) % 60);
+
+            var resultText = "With your current attendance percentage of " + currentPercent + "%, you need to make up " + hours + " hours and " + minutes + " minutes.";
+
+            var resultContainer = document.getElementById("result2");
+            resultContainer.innerHTML = "<p>" + resultText + "</p>";
+        }
+    </script>
 </body>
 
 </html>
