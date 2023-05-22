@@ -7,7 +7,7 @@
     <title>Attendance Calculators</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Dark theme */
+        /* Dark Theme*/
         body {
             background-color: #0f0f0f;
             color: #ffffff;
@@ -75,11 +75,11 @@
 
         <div class="calculator-selector">
             <button class="btn btn-primary" onclick="selectCalculator(1)">Calculate by Hours</button>
-            <button class="btn btn-primary" onclick="selectCalculator(2)">Calculate by Percent</button>
+            <button class="btn btn-primary" onclick="selectCalculator(2)">Calculator by Percent</button>
         </div>
 
         <div id="calculator1" class="calculator">
-            <h2>Calculate based on hours</h2>
+            <h2>Calculate by Hours</h2>
             <form onsubmit="event.preventDefault(); calculateHoursToMakeup(1);">
                 <div class="form-group">
                     <label for="total_hours_possible1">How many hours are possible in the course?</label>
@@ -108,7 +108,7 @@
         </div>
 
         <div id="calculator2" class="calculator">
-            <h2>Calculate based on current percent</h2>
+            <h2>Calculate by Percent</h2>
             <form onsubmit="event.preventDefault(); calculateHoursNeeded(2);">
                 <div class="form-group">
                     <label for="total_hours2">Total Possible Hours:</label>
@@ -173,7 +173,6 @@
                 const resultContainer = document.getElementById(`result${calculatorId}`);
                 resultContainer.innerHTML = `
           <h3>Result:</h3>
-          <hr>
           <p>Current Attendance Percentage: ${currentPercent.toFixed(2)}%</p>
           <p>Time Needed to Reach Goal: ${timeHours} hours and ${timeMinutes.toFixed(2)} minutes</p>
         `;
@@ -198,8 +197,7 @@
                 const resultContainer = document.getElementById(`result${calculatorId}`);
                 resultContainer.innerHTML = `
           <h3>Result:</h3>
-          <hr>
-          <p>Goal Hours Required: ${goalHours.toFixed(2)}</p>
+          <p>Current Attendance Percentage: ${currentPercent}%</p>
           <p>Time Needed to Reach Goal: ${timeHours} hours and ${timeMinutes.toFixed(2)} minutes</p>
         `;
             }
