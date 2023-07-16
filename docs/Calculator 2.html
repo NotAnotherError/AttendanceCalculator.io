@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Attendance Calculator</title>
+    <style>
+        /* Set the color scheme */
+        body {
+            background-color: #F0F0F0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #1E90FF;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333333;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #CCCCCC;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #1E90FF;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0077FF;
+        }
+
+        #result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #FFFFFF;
+            border: 1px solid #CCCCCC;
+            border-radius: 3px;
+            color: #333333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Attendance Calculator</h1>
+
+    <label for="total_hours">Total Possible Hours:</label>
+    <input type="text" id="total_hours">
+
+    <label for="current_percent">Current Attendance Percentage:</label>
+    <input type="text" id="current_percent">
+
+    <label for="goal_percent">Goal Attendance Percentage:</label>
+    <input type="text" id="goal_percent">
+
+    <button onclick="calculateHoursNeeded()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateHoursNeeded() {
+            var totalPossibleHours = parseFloat(document.getElementById("total_hours").value);
+            var currentPercent = parseFloat(document.getElementById("current_percent").value);
+            var goalPercent = parseFloat(document.getElementById("goal_percent").value);
+
+            // Calculations
+            var currentDecimal = currentPercent / 100;
+            var goalDecimal = goalPercent / 100;
+            var decimalDiff = goalDecimal - currentDecimal;
+            var hoursNeeded = decimalDiff * totalPossibleHours;
+
+            // Calculate hours and minutes
+            var hours = Math.floor(hoursNeeded);
+            var minutes = Math.floor((hoursNeeded * 60) % 60);
+
+            // Format the result string
+            var resultText = "With your current attendance percentage of " + currentPercent + "%, you need to make up " + hours + " hours and " + minutes + " minutes.";
+
+            // Display the result
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = '<p>' + resultText + '</p>';
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
